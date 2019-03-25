@@ -1,0 +1,42 @@
+import pandas as pd
+import numpy as np
+import pandas_datareader.data as web
+import datetime
+import statsmodels.api as sm
+import statsmodels.formula.api as smf
+import matplotlib.pyplot as plt
+
+
+raw_data = pd.read_csv('C:/Users/J042666/Desktop/2019.03 HOUST and GDP.csv')
+df = df.loc[:, ['Housing Starts', 'Unemployment Rate']]
+
+for idx, col in enumerate(df.columns):
+
+    freq = "monthly "
+    units = " million "
+    colname = col
+
+    selectedCol = df.loc[:, [col]]
+
+    alltime = selectedCol.mean()[0]
+    low = selectedCol.min()[0]
+    maximum = selectedCol.max()[0]
+    today = selectedCol.iloc[720][0]
+    one_year = selectedCol.iloc[709:721].mean()[0]
+    two_year = selectedCol.iloc[697:721].mean()[0]
+    five_year = selectedCol.iloc[661:721].mean()[0]
+    one_year_vol = selectedCol.iloc[709:721].std()[0]
+    two_year_vol = selectedCol.iloc[697:721].std()[0]
+    five_year_vol = selectedCol.iloc[661:721].std()[0]
+    today_vs_1 = ((today/one_year) -1)*100
+    today_vs_2 = ((today/two_year) -1)*100
+    today_vs_5 = ((today/five_year) -1)*100
+    rolling_1 = selectedCol.rolling(window=3).mean()
+    rolling_2 = selectedCol.rolling(window=6).mean()
+    rolling_3 = selectedCol.rolling(window=9).mean()
+    today_vs_1_rolling = ((today/rolling_1.iloc[720]) -1)*100
+    today_vs_2_rolling = ((today/rolling_2.iloc[720]) -1)*100
+    today_vs_3_rolling = ((today/rolling_3.iloc[720]) -1)*100
+    summary = ("The " + str(freq) + str(colname) + " currently stands at " + str(today) + str(units) + " which compares to the 1,2 and 5 year averages of " + str(one_year) + str(units) + "," + str(two_year) + str(units) + "," + " and " + str(five_year) + str(units) + " respectively. " + " Based on the current " + str(colname) + " levels, that reflects a change of" + str(today_vs_1) + ", " + str(today_vs_2) + " and " + str(today_vs_5) + " respectively." " Since the metric began being tracked, the minimum, maximum and long run average total " + str(low) + str(units) + ", " + str(maximum) + str(units) + " and " + str(alltime) + str(units) + " respectively. " "The 1, 2 and 5 year standard deviation for " + str(colname) + " totals " + str(one_year_vol) + str(units) + " ," + str(two_year_vol) + str(units) + " and" + str(five_year_vol) + str(units) + " respectively." + " Based on the current " + str(colname) + " levels compared to the 3, 6 and 9 month rolling averages, the current level reflects a change of " + str(today_vs_1_rolling[0]) + ", " + str(today_vs_2_rolling[0]) + " and " + str(today_vs_3_rolling[0]) + " respectively.")
+    print(summary)
+  
